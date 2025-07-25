@@ -27,13 +27,31 @@
     audio {
       display: none;
     }
+    #play-button {
+      margin-top: 2vw;
+      font-size: 2vw;
+      padding: 0.5em 1em;
+      cursor: pointer;
+      background-color: #0a74da;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #status {
+      margin-top: 1vw;
+      font-size: 1.5vw;
+      color: #ff5555;
+    }
   </style>
 </head>
 <body>
-  <div id="time">--:--</div>
+  <div id="time">--:--:--</div>
   <div id="date">--</div>
 
-  <audio id="radio" autoplay>
+  <button id="play-button">Prehrať rádio</button>
+  <div id="status"></div>
+
+  <audio id="radio" preload="none">
     <source src="https://stream.funradio.sk/fun128.mp3" type="audio/mpeg" />
     Nepodporovaný prehliadač.
   </audio>
@@ -53,9 +71,26 @@
       const year = now.getFullYear();
       document.getElementById('date').textContent = `${dayName}, ${dayNum}.${monthNum}.${year}`;
     }
-
     setInterval(updateClock, 1000);
     updateClock();
+
+    const radio = document.getElementById('radio');
+    const playButton = document.getElementById('play-button');
+    const statusDiv = document.getElementById('status');
+
+    playButton.addEventListener('click', () => {
+      radio.play().then(() => {
+        playButton.style.display = 'none';
+        statusDiv.textContent = 'Rádio prehráva...';
+      }).catch(err => {
+        statusDiv.textContent = 'Chyba pri spustení rádia: ' + err.message;
+      });
+    });
+
+    radio.addEventListener('error', () => {
+      statusDiv.textContent = 'Nastala chyba pri prehrávaní rádia.';
+      playButton.style.display = 'block';
+    });
   </script>
 </body>
 </html>
