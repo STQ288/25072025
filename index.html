@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Funrádio TV</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      color: white;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #time {
+      font-size: 8vw;
+      font-weight: bold;
+      line-height: 1;
+    }
+    #date {
+      font-size: 2.3vw;
+      margin-top: 1vw;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="time">--:--</div>
+  <div id="date">--</div>
+
+  <audio id="radio" autoplay>
+    <source src="https://stream.funradio.sk/fun128.mp3" type="audio/mpeg" />
+    Nepodporovaný prehliadač.
+  </audio>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      const s = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('time').textContent = `${h}:${m}:${s}`;
+
+      const days = ["nedeľa", "pondelok", "utorok", "streda", "štvrtok", "piatok", "sobota"];
+      const dayName = days[now.getDay()];
+      const dayNum = now.getDate().toString().padStart(2, '0');
+      const monthNum = (now.getMonth() + 1).toString().padStart(2, '0');
+      const year = now.getFullYear();
+      document.getElementById('date').textContent = `${dayName}, ${dayNum}.${monthNum}.${year}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
